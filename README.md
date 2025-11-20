@@ -19,9 +19,9 @@ The best-performing models (Decision Tree and Random Forest) achieved accuracy s
 
 ---
 
-# ============================================
+
 # 🩺 Heart Disease Prediction Project Workflow
-# ============================================
+
 
 # Step 1: Upload Kaggle API credentials
 from google.colab import files
