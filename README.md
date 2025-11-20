@@ -1,88 +1,161 @@
-# AI-Engineering-Project-Beginner-Series
-Contains my first AI Engineering project.
-#  Heart Disease Prediction using Machine Learning
+# 🩺 Heart Disease Prediction using Machine Learning
 
-##  Project Background
-Heart disease remains one of the leading causes of death worldwide. Early detection can significantly improve patient outcomes and reduce mortality rates. This project applies machine learning techniques to predict the likelihood of heart disease based on patient health attributes.
+## 📘 Project Overview
+This project applies multiple machine learning algorithms to predict the likelihood of heart disease based on patient health attributes such as age, sex, chest pain type, cholesterol levels, blood pressure, and more.  
 
----
+The dataset is sourced from Kaggle: [Heart Disease Dataset](https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset).  
+Models tested include Logistic Regression, K-Nearest Neighbors, Support Vector Machine, Decision Tree, Random Forest, and XGBoost.  
 
-##  Methodology
-1. **Data Acquisition**  
-   - Dataset sourced from Kaggle: [Heart Disease Dataset](https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset)
-
-2. **Data Preprocessing**  
-   - Handled missing values  
-   - Applied feature scaling using `StandardScaler`  
-   - Encoded categorical variables where necessary  
-
-3. **Model Training**  
-   - Logistic Regression (baseline model)  
-   - K-Nearest Neighbors (KNN)  
-   - Support Vector Machine (SVM)  
-   - Decision Tree  
-   - Random Forest  
-   - XGBoost  
-
-4. **Model Evaluation**  
-   - Accuracy  
-   - Precision, Recall, F1-score  
-   - Confusion Matrix  
-   - ROC-AUC  
-
-5. **Comparison & Visualization**  
-   - Bar charts comparing model accuracies  
-   - Confusion matrix heatmaps  
+The best-performing models (Decision Tree and Random Forest) achieved accuracy scores above 98%, demonstrating strong predictive power for this dataset.
 
 ---
 
-##  Data Sources
-- **Dataset:** Heart Disease Dataset by *johnsmith88* on Kaggle  
-- **Features include:**  
-  - Age, Sex, Chest Pain Type (cp), Resting Blood Pressure (trestbps), Cholesterol (chol), Fasting Blood Sugar (fbs), Resting ECG (restecg), Maximum Heart Rate (thalach), Exercise Induced Angina (exang), ST Depression (oldpeak), Slope, Number of Major Vessels (ca), Thalassemia (thal)  
-- **Target variable:** `target` (1 = heart disease, 0 = no heart disease)
+## 🎯 Project Objectives
+- Build and evaluate multiple machine learning models for heart disease prediction.  
+- Learn how to preprocess and scale health data for training.  
+- Understand how to split data into training and testing sets for reproducibility.  
+- Compare model performance using accuracy, precision, recall, and F1-score.  
+- Demonstrate practical application of machine learning in healthcare prediction tasks.  
 
 ---
 
-##  Model Design
-- **Baseline:** Logistic Regression for interpretability  
-- **Ensemble Models:** Random Forest and XGBoost for stronger predictive performance  
-- **Train/Test Split:** 80/20 with fixed random state for reproducibility  
+# ============================================
+# 🩺 Heart Disease Prediction Project Workflow
+# ============================================
+
+# Step 1: Upload Kaggle API credentials
+from google.colab import files
+files.upload()
+
+# Step 2: Download dataset from Kaggle
+!kaggle datasets download -d johnsmith88/heart-disease-dataset -p data
+
+# Step 3: Unzip dataset
+import zipfile
+with zipfile.ZipFile("data/heart-disease-dataset.zip", 'r') as zip_ref:
+    zip_ref.extractall("data")
+
+# Step 4: Load dataset
+import pandas as pd
+df = pd.read_csv("data/heart.csv")
+print("Dataset shape:", df.shape)
+df.head()
+
+# Step 5: Separate features and target
+dataset = pd.read_csv("data/heart.csv")
+x = dataset.iloc[:, :-1].values   # Features
+y = dataset.iloc[:, -1].values    # Target
+
+# Step 6: Encode categorical variables
+from sklearn.preprocessing import LabelEncoder
+le1 = LabelEncoder() 
+le2 = LabelEncoder() 
+le6 = LabelEncoder() 
+le8 = LabelEncoder() 
+le10 = LabelEncoder() 
+
+x[:,1] = le1.fit_transform(x[:,1])
+x[:,2] = le2.fit_transform(x[:,2])
+x[:,6] = le6.fit_transform(x[:,6])
+x[:,8] = le8.fit_transform(x[:,8])
+x[:,10] = le10.fit_transform(x[:,10])
+
+# Step 7: Import machine learning algorithms
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+
+# Step 8: Define models to test
+models = []
+models.append(('DTree', DecisionTreeClassifier()))
+models.append(('Gaussian', GaussianNB()))
+models.append(('KNC', KNeighborsClassifier()))
+models.append(('Random Forest', RandomForestClassifier()))
+models.append(('Gradient Boosting', GradientBoostingClassifier()))
+models.append(('Support Machines', SVC(gamma='auto')))
+models.append(('LR', LogisticRegression(max_iter=1000)))
+
+# Step 9: Cross-validation to evaluate models
+from sklearn.model_selection import KFold, cross_val_score
+
+for name, model in models:
+    kfold = KFold(n_splits=10, random_state=42, shuffle=True)
+    cv_results = cross_val_score(model, x, y, cv=kfold, scoring='accuracy')
+    print('Model Name:', name, ' Results:', cv_results.mean())
+
+# Step 10: Visualize model accuracies (replace with actual values)
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 6))
+plt.bar("Logistic Regression", LogisticRegression_Accuracy, width=0.6)
+plt.bar("KNeighbors", KNeighbors_Accuracy, width=0.6)
+plt.bar("Support Vector Machine", SVM_Accuracy, width=0.6)
+plt.bar("Decision Tree", Decision_Accuracy, width=0.6)
+plt.bar("Random Forest", RandomForest_Accuracy, width=0.6)
+plt.bar("XGBoost", XGBoost_Accuracy, width=0.6)
+plt.xlabel("Machine Learning Algorithm")
+plt.ylabel("Accuracy")
+plt.show()
+
+# Step 11: Example prediction with Random Forest
+# (replace with real values in correct order of features)
+sample_input = [[40, 1, 2, 110, 290, 1, 2, 160, 0, 2.2, 1, 0, 2]]
+
+result = model_randomforest.predict(sc.transform(sample_input))
+
+if result == [0]:
+    print('Person Not Having Heart Disease')
+else:
+    print("Person Having Heart Disease")
+## 📊 Results and Performance
+After training and evaluation, the models achieved the following accuracies:
+
+- Decision Tree: **99.0%**
+- Random Forest: **98.8%**
+- Support Vector Machine: **90.5%**
+- Logistic Regression: **84.3%**
+- K-Nearest Neighbors: **81.9%**
+
+Tree-based methods (Decision Tree and Random Forest) provided the strongest predictive performance, while Logistic Regression remained useful for interpretability in medical contexts.
 
 ---
 
-## Results and Conclusion
-- This were the performance of differnt models:
-    Model Name:  DTree  Results:  0.9902439024390244
-    Model Name:  KNC  Results:  0.8195121951219513
-    Model Name:  Random Forest  Results:  0.9878048780487806
-    Model Name:  Support Machines  Results:  0.9048780487804879
-    Model Name:  LR  Results:  0.8426829268292682
-**Conclusion:**  
-Across the models tested, Decision Tree (99.0%) and Random Forest (98.8%) achieved the highest accuracies, showing that tree‑based methods are particularly effective for this dataset. The Support Vector Machine (90.5%) also performed strongly, while Logistic Regression (84.3%) and K‑Nearest Neighbors (81.9%) lagged behind in predictive power.
+## 💡 Application Areas
+This project demonstrates foundational skills applicable in various AI and healthcare applications:
 
-Decision Tree: Highest accuracy, but may risk overfitting due to its tendency to memorize training data.
-
-Random Forest: Nearly as accurate as the Decision Tree, but more robust and generalizable thanks to ensemble averaging.
-
-Support Vector Machine: Balanced performance, effective at capturing complex boundaries.
-
-Logistic Regression: Lower accuracy, but remains interpretable and useful as a baseline.
-
-KNN: Lowest accuracy, suggesting it may not be well‑suited for this dataset without further tuning.
-
-Overall: Tree‑based ensemble methods (Random Forest) provide the best balance of accuracy and reliability, making them the most suitable choice for heart disease prediction in this project. Logistic Regression, while less accurate, is still valuable for its interpretability in medical contexts.
+| Application Area        | Description |
+|--------------------------|-------------|
+| 🏥 Healthcare            | Predicts likelihood of heart disease for early intervention and patient monitoring. |
+| 📊 Public Health Policy  | Supports data-driven decision making for resource allocation and prevention programs. |
+| 🛒 Insurance             | Helps insurers assess client risk profiles for coverage decisions. |
+| 🧑‍🏫 Education           | Teaches fundamentals of machine learning using real-world medical datasets. |
+| 🏭 Clinical Research     | Assists researchers in testing predictive models for cardiovascular risk. |
 
 ---
 
-##  How to Run
-```bash
- Clone the repositories
-git clone https://github.com/your-username/heart-disease-prediction.git
-cd heart-disease-prediction
+## 🚀 How to Run the Project
+**Requirements**
+- Python 3.8+
+- scikit-learn
+- pandas
+- numpy
+- matplotlib
+- seaborn
+- xgboost
 
-# Install dependencies
-pip install -r requirements.txt
+**Run the Notebook**
+1. Clone this repository or open in Google Colab.  
+2. Install dependencies:  
+   ```bash
+   pip install -r requirements.txt
+Author
+Fatuma Ramadhan  
+Kiambu, Kenya 💼 
+Eager to do more projects applying machine learning to healthcare and statistical analysis.
 
-# Run the notebook
-googlecolab notebook Heart_Disease_Prediction.ipynb
+Conclusion
+This project provides a strong foundation for understanding how machine learning can be applied to healthcare prediction tasks. Learners are encouraged to experiment with hyperparameter tuning, feature engineering, and ensemble methods to further improve accuracy and robustness.
+
