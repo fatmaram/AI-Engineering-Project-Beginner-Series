@@ -24,6 +24,7 @@ The best-performing models (Decision Tree and Random Forest) achieved accuracy s
 
 
 # Step 1: Upload Kaggle API credentials
+```python
 from google.colab import files
 files.upload()
 
